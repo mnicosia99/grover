@@ -323,4 +323,4 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
         filename = '/content/gdrive/My Drive/Articles/' + f"{article_title}.html"
         with open(filename, 'w' ) as f:
           f.write(article_text)
-        write_to_pdf(filename, "/content/gdrive/My Drive/Articles")
+        # write_to_pdf(filename, "/content/gdrive/My Drive/Articles")
