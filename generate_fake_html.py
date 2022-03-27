@@ -10,7 +10,6 @@ from datetime import datetime, timedelta
 import requests
 import base64
 from working.fakedata import create_authors, get_random_school, get_random_department, get_date
-from working.create_pdf import write_to_pdf
 from ttp import ttp
 
 sys.path.append('../')
@@ -18,106 +17,7 @@ from lm.modeling import GroverConfig, sample
 from sample.encoder import get_encoder, _tokenize_article_pieces, extract_generated_target
 import random
 
-# Fake person who will be slandered/libeled in the fake articles
-NAME_TO_SLANDER = "Chucky McChuckster"
-# IMAGE_TO_SLANDER = "https://images.generated.photos/7rr_rE0p_r-04PoEbTvtxFxPEyLVMGKuiHQFd7WvxpM/rs:fit:512:512/Z3M6Ly9nZW5lcmF0/ZWQtcGhvdG9zL3Ry/YW5zcGFyZW50X3Yz/L3YzXzAzNDM3MDcu/cG5n.png"
-
-# SLANDEROUS_SEED_HEADLINES = [
-#   f"{NAME_TO_SLANDER} convicted of stealing puppies",
-#   f"{NAME_TO_SLANDER} caught lying about growing the world's largest watermelon",
-#   f"{NAME_TO_SLANDER} single-handedly started the Cold War",
-#   f"{NAME_TO_SLANDER} forged priceless works of modern art for decades",
-#   f"{NAME_TO_SLANDER} claimed to be Pokemon master, but caught in a lie",
-#   f"{NAME_TO_SLANDER} bought fake twitter followers to pretend to be a celebrity",
-#   f"{NAME_TO_SLANDER} created the original design for Ultron",
-#   f"{NAME_TO_SLANDER} revealed as a foriegn spy for the undersea city of Atlantis",
-#   f"{NAME_TO_SLANDER} involved in blackmail scandal with King Trident of Atlantis",
-#   f"{NAME_TO_SLANDER} is dumb",
-#   f"{NAME_TO_SLANDER} lied on tax returns to cover up past life as a Ninja Turtle",
-#   f"{NAME_TO_SLANDER} stole billions from investors in a new pet store",
-#   f"{NAME_TO_SLANDER} claims to be a Ninja Turtle but was actually lying",
-#   f"{NAME_TO_SLANDER} likely to be sentenced to 20 years in jail for chasing a cat into a tree",
-#   f"{NAME_TO_SLANDER} caught in the act of illegal trafficking of Teletubbies",
-#   f"{NAME_TO_SLANDER} commits a multitude of crimes against dinosaurs",
-# ]
-
-# def get_fake_articles(domain):
-#     articles = []
-
-#     headlines_to_inject = SLANDEROUS_SEED_HEADLINES
-
-#     for fake_headline in headlines_to_inject:
-#         days_ago = random.randint(1, 7)
-#         pub_datetime = datetime.now() - timedelta(days=days_ago)
-
-#         publish_date = pub_datetime.strftime('%m-%d-%Y')
-#         iso_date = pub_datetime.isoformat()
-
-#         articles.append({
-#             'summary': "",
-#             'title': fake_headline,
-#             'text': '',
-#             'authors': ["Staff Writer"],
-#             'publish_date': publish_date,
-#             'iso_date': iso_date,
-#             'domain': domain,
-#             'image_url': IMAGE_TO_SLANDER,
-#             'tags': ['Breaking News', 'Investigations', 'Criminal Profiles'],
-#         })
-
-#     return articles
-
-# def get_articles_from_real_blog(domain, feed_url):
-#     feed_data = feedparser.parse(feed_url)
-#     articles = []
-#     for post in feed_data.entries:
-#         if 'published_parsed' in post:
-#             publish_date = time.strftime('%m-%d-%Y', post.published_parsed)
-#             iso_date = datetime(*post.published_parsed[:6]).isoformat()
-#         else:
-#             publish_date = time.strftime('%m-%d-%Y')
-#             iso_date = datetime.now().isoformat()
-
-#         if 'summary' in post:
-#             summary = post.summary
-#         else:
-#             summary = None
-
-#         tags = []
-#         if 'tags' in post:
-#             tags = [tag['term'] for tag in post['tags']]
-#             if summary is None:
-#                 summary = ", ".join(tags)
-
-#         image_url = None
-#         if 'media_content' in post:
-#             images = post.media_content
-#             if len(images) > 0 and 'url' in images[0]:
-#                 image_url = images[0]['url']
-#                 # Hack for NYT images to fix tiny images in the RSS feed
-#                 if "-moth" in image_url:
-#                     image_url = image_url.replace("-moth", "-threeByTwoMediumAt2X")
-
-#         if 'authors' in post:
-#             authors = list(map(lambda x: x["name"], post.authors))
-#         else:
-#             authors = ["Staff Writer"]
-
-#         articles.append({
-#             'summary': summary,
-#             'title': post.title,
-#             'text': '',
-#             'authors': authors,
-#             'publish_date': publish_date,
-#             'iso_date': iso_date,
-#             'domain': domain,
-#             'image_url': image_url,
-#             'tags': tags,
-#         })
-
-#     return articles
-def generate_html_from_article_text(article_title, article_text, author_list, publish_date, university, department, image_url=None):
-    
+def generate_html_from_article_text(article_title, article_text, author_list, publish_date, university, department, image_url=None):    
     # parse the article text
     p = ttp.Parser()
     result = p.parse(article_text)
@@ -217,31 +117,12 @@ for ext in ['data-00000-of-00001', 'index', 'meta']:
             f.write(chunk)
     print(f"Just downloaded {model_type}/model.ckpt.{ext}!", flush=True)
     
-# Which news website to 'clone'
-DOMAIN_STYLE_TO_COPY = "https://www.hindawi.com/journals/bmri/2013/358945/"
-# RSS_FEEDS_OF_REAL_STORIES_TO_EMULATE = [
-#   "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
-# ]
-
-# Ready to start grabbing RSS feeds
-# domain = DOMAIN_STYLE_TO_COPY
-# feed_urls = RSS_FEEDS_OF_REAL_STORIES_TO_EMULATE
 articles = list()
-
-# Get the read headlines to look more realistic
-# for feed_url in feed_urls:
-    # articles += get_articles_from_real_blog(domain, feed_url)
 
 f = open("/content/gdrive/MyDrive/grover-fork2/article.json")
 article = json.load(f)
 f.close()
 articles.append(article)
-
-# Toss in the slanderous articles
-# articles += get_fake_articles(domain)
-
-# Randomize the order the articles are generated
-# random.shuffle(articles)
 
 # Load the pre-trained "huge" Grover model with 1.5 billion params
 model_config_fn = '/content/gdrive/MyDrive/grover-fork2/grover/lm/configs/mega.json'
@@ -274,35 +155,14 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
     saver = tf.train.Saver()
     saver.restore(sess, model_ckpt)
 
-    # START MAKING SOME FAKE NEWS!!
-    # Loop through each headline we scraped from an RSS feed or made up
+    # process each research paper to make fake papers
     for article in articles:
         print(f"Building article from headline '{article['title']}'")
-
-        # # If the headline is one we made up about a specific person, it needs special handling
-        # if NAME_TO_SLANDER in article['title']:
-        #     # The first generated article may go off on a tangent and not include the target name.
-        #     # In that case, re-generate the article until it at least talks about our target person
-        #     attempts = 0
-        #     while NAME_TO_SLANDER not in article['text']:
-        #         # Generate article body given the context of the real blog title
-        #         article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
-
-        #         # If the Grover model never manages to generate a good article about the target victim,
-        #         # give up after 10 tries so we don't get stuck in an infinite loop
-        #         attempts += 1
-        #         if attempts > 5:
-        #             continue
-        # If the headline was scraped from an RSS feed, we can just blindly generate an article
-        # else:
-            # article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
+        # generate fake text based on the original paper
         article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
-
-        # Now, generate a fake headline that better fits the generated article body
-        # This replaces the real headline so none of the original article content remains
+        # Generate a fake title that fits the generated paper text
         article['title'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
 
-        # Grab generated text results so we can post them to WordPress
         article_title = article['title']
         article_text = article['text']
         article_date = article["iso_date"]
@@ -323,4 +183,3 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
         filename = '/content/gdrive/My Drive/Articles/' + f"{article_title}.html"
         with open(filename, 'w' ) as f:
           f.write(article_text)
-        # write_to_pdf(filename, "/content/gdrive/My Drive/Articles")
