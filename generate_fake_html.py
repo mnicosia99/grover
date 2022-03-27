@@ -17,11 +17,12 @@ from lm.modeling import GroverConfig, sample
 from sample.encoder import get_encoder, _tokenize_article_pieces, extract_generated_target
 import random
 
-def generate_html_from_article_text(article_title, article_text, author_list, publish_date, university, department, image_url=None):    
+def generate_html_from_article_text(article_title, article_text, author_list, article_summary, publish_date, university, department, image_url=None):    
     # parse the article text
     p = ttp.Parser()
     result = p.parse(article_text)
     article_text = result.html
+    image = None
     
     #  split article on newlines
     lines = article_text.split("\n")
@@ -36,8 +37,8 @@ def generate_html_from_article_text(article_title, article_text, author_list, pu
     print(article_text)
     
     # if an image url exists, add it to the returned html
-    # if image_url is not None:
-    #     article_text = "<img src=" + str(image_url) + "/>" + str(article_text)
+    if image_url is not None:
+        image = "<img src=\"https://journals.plos.org/plosone/\"/>"
     
     #  create html from article text
     style = " hr.solid { border-top: 3px solid #bbb;}"
@@ -49,9 +50,10 @@ def generate_html_from_article_text(article_title, article_text, author_list, pu
     publish_date = "Published Date: " + publish_date + "<br/>\n"
     university = "<p>" + university + "</p>\n"
     department = department + "<br/>\n"
+    abstract = "<h3>Abstract</h3>\n<p>" + article_summary + "</p>\n"
     sep = "<hr class=\"solid\">\n"
-    body = article_title + authors + publish_date + sep + university + department + sep + article_text
-    article_html = "<html><head><style>" + style + "</style></head><body>" + body + "</body></html>"
+    body = article_title + authors + publish_date + sep + university + department + sep + abstract + "<br/><br/>" + article_text
+    article_html = "<html><head>" + image + "<style>" + style + "</style></head><body>" + body + "</body></html>"
  
     # return the article as html
     return article_html
@@ -162,12 +164,15 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
         article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
         # Generate a fake title that fits the generated paper text
         article['title'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
+        # Generate a fake abstract that fits the generated paper text
+        article['summary'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
 
         article_title = article['title']
         article_text = article['text']
         article_date = article["iso_date"]
         article_image_url = article["image_url"]
         article_tags = article['tags']
+        article_summary = article['summary']
 
         # Make the article body look more realistic - add spacing, link Twitter handles and hashtags, etc.
         # You could add more advanced pre-processing here if you wanted.
@@ -176,7 +181,7 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
         department = get_random_department()
         publish_date = get_date(365 * 2, 365 * 8)
         article_text = generate_html_from_article_text(
-            article_title, article_text, authors, publish_date, university, department, article_image_url)
+            article_title, article_text, authors, article_summary, publish_date, university, department, article_image_url)
 
         print(f" - Generated fake article titled '{article_title}'")
         article_title = article_title.replace(" ", "-")
