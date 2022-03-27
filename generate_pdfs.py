@@ -14,8 +14,8 @@ from working.create_pdf import write_to_pdf
 from ttp import ttp
 
 sys.path.append('../')
-from ../lm.modeling import GroverConfig, sample
-from ../sample.encoder import get_encoder, _tokenize_article_pieces, extract_generated_target
+from lm.modeling import GroverConfig, sample
+from sample.encoder import get_encoder, _tokenize_article_pieces, extract_generated_target
 import random
 
 # Fake person who will be slandered/libeled in the fake articles
