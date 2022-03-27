@@ -137,7 +137,7 @@ def generate_html_from_article_text(article_title, article_text, authors, publis
     
     # if an image url exists, add it to the returned html
     if image_url is not None:
-        article_text = "<img src=" + image_url + "/>" + article_text
+        article_text = "<img src=" + str(image_url) + "/>" + str(article_text)
     
     #  create html from article text
     style = " hr.solid { border-top: 3px solid #bbb;}"
