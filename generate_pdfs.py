@@ -9,8 +9,8 @@ import time
 from datetime import datetime, timedelta
 import requests
 import base64
-from fakedata import create_authors, get_random_school, get_random_department, get_date
-from create_pdf import write_to_pdf
+from working.fakedata import create_authors, get_random_school, get_random_department, get_date
+from working.create_pdf import write_to_pdf
 from ttp import ttp
 
 sys.path.append('../')
