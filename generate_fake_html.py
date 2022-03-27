@@ -119,7 +119,7 @@ for ext in ['data-00000-of-00001', 'index', 'meta']:
     
 articles = list()
 
-f = open("/content/gdrive/MyDrive/grover-fork2/article_mod_model.json")
+f = open("/content/gdrive/MyDrive/grover-fork2/grover/article_mod_model.json")
 article = json.load(f)
 f.close()
 articles.append(article)
