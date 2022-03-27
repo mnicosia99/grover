@@ -116,7 +116,7 @@ NAME_TO_SLANDER = "Chucky McChuckster"
 #         })
 
 #     return articles
-def generate_html_from_article_text(article_title, article_text, authors, publish_date, university, department, image_url=None):
+def generate_html_from_article_text(article_title, article_text, author_list, publish_date, university, department, image_url=None):
     
     # parse the article text
     p = ttp.Parser()
@@ -142,7 +142,10 @@ def generate_html_from_article_text(article_title, article_text, authors, publis
     #  create html from article text
     style = " hr.solid { border-top: 3px solid #bbb;}"
     article_title = "<h1>" + article_title + "</h1>\n"
-    authors = "<p>Authors: " + authors + "</p>\n"
+    authors = "<p>Authors: "
+    for author in author_list:
+        authors += author + " "
+    authors += "</p>\n"
     publish_date = "Published Date: " + publish_date + "<br/>\n"
     university = "<p>" + university + "</p>\n"
     department = department + "<br/>\n"
