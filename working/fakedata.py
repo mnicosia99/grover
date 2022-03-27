@@ -17,6 +17,7 @@ def get_date(start_days_ago=1, end_days_ago=365):
         
         print(publish_date)
         print(iso_date)
+        return publish_date
 
 def create_authors(nbr_authors=get_number_authors()):
     authors = list()
