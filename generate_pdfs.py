@@ -131,7 +131,9 @@ def generate_html_from_article_text(article_title, article_text, authors, publis
         new_lines.append(line)
     
     #  add paragraph between each new line
-    article_text = "<p>".join(new_lines)    
+    article_text = "<p>".join(new_lines)
+    
+    print(article_text)
     
     # if an image url exists, add it to the returned html
     if image_url is not None:
