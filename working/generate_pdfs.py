@@ -197,7 +197,7 @@ def generate_article_attribute(sess, encoder, tokens, probs, article, target='ar
 
 model_type = "mega"
 
-model_dir = os.path.join('/content/gdrive/MyDrive/grover-fork/grover/models', model_type)
+model_dir = os.path.join('/content/gdrive/MyDrive/grover-fork2/grover/models', model_type)
 if not os.path.exists(model_dir):
     os.makedirs(model_dir)
 
@@ -227,7 +227,7 @@ articles = list()
 # for feed_url in feed_urls:
     # articles += get_articles_from_real_blog(domain, feed_url)
 
-f = open("/content/gdrive/MyDrive/grover-fork/article.json")
+f = open("/content/gdrive/MyDrive/grover-fork2/article.json")
 article = json.load(f)
 f.close()
 articles.append(article)
@@ -239,8 +239,8 @@ articles.append(article)
 # random.shuffle(articles)
 
 # Load the pre-trained "huge" Grover model with 1.5 billion params
-model_config_fn = '/content/gdrive/MyDrive/grover-fork/grover/lm/configs/mega.json'
-model_ckpt = '/content/gdrive/MyDrive/grover-fork/grover/models/mega/model.ckpt'
+model_config_fn = '/content/gdrive/MyDrive/grover-fork2/grover/lm/configs/mega.json'
+model_ckpt = '/content/gdrive/MyDrive/grover-fork2/grover/models/mega/model.ckpt'
 encoder = get_encoder()
 news_config = GroverConfig.from_json_file(model_config_fn)
 
