@@ -121,10 +121,14 @@ for ext in ['data-00000-of-00001', 'index', 'meta']:
     
 articles = list()
 
-f = open("/content/gdrive/MyDrive/grover-fork2/grover/article_mod_model.json")
-article = json.load(f)
-f.close()
-articles.append(article)
+for filename in os.listdir("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input"):
+    f = os.path.join("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input/", filename)
+    # checking if it is a file
+    if os.path.isfile(f):
+        f = open("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input/" + filename)
+        article = json.load(f)
+        f.close()
+        articles.append(article)
 
 # Load the pre-trained "huge" Grover model with 1.5 billion params
 model_config_fn = '/content/gdrive/MyDrive/grover-fork2/grover/lm/configs/mega.json'
