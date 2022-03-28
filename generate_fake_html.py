@@ -122,10 +122,10 @@ for ext in ['data-00000-of-00001', 'index', 'meta']:
 articles = list()
 
 for filename in os.listdir("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input"):
-    f = os.path.join("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input/", filename)
+    fn = os.path.join("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input/", filename)
     # checking if it is a file
-    if os.path.isfile(f):
-        # f = open("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input/" + filename)
+    if os.path.isfile(fn):
+        f = open(fn)
         article = json.load(f)
         f.close()
         articles.append(article)
