@@ -125,6 +125,7 @@ for filename in os.listdir("/content/gdrive/MyDrive/grover-fork2/grover/working/
     fn = os.path.join("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input/", filename)
     # checking if it is a file
     if os.path.isfile(fn):
+        print(fn)
         f = open(fn)
         article = json.load(f)
         f.close()
