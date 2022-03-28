@@ -125,11 +125,14 @@ for filename in os.listdir("/content/gdrive/MyDrive/grover-fork2/grover/working/
     fn = os.path.join("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input/", filename)
     # checking if it is a file
     if os.path.isfile(fn):
-        print(fn)
-        f = open(fn)
-        article = json.load(f)
-        f.close()
-        articles.append(article)
+        try:
+            f = open(fn)
+            article = json.load(f)
+            articles.append(article)
+        except:
+            print("unable to parse json file " + fn)    
+        finally:
+            f.close()
 
 # Load the pre-trained "huge" Grover model with 1.5 billion params
 model_config_fn = '/content/gdrive/MyDrive/grover-fork2/grover/lm/configs/mega.json'
