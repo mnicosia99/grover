@@ -127,7 +127,7 @@ def create_fake(article, sess, encoder, tokens, probs, count):
 
     print(f" - Generated fake article titled '{article_title}'")
     article_title = article_title.replace(" ", "-")
-    filename = "/content/gdrive/My Drive/Articles/generated_fake-" + count + ".html"
+    filename = "/content/gdrive/My Drive/Articles/generated_fake-" + str(count) + ".html"
     with open(filename, 'w' ) as f:
         f.write(article_text)
     count += 1
