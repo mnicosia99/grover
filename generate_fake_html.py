@@ -102,7 +102,7 @@ def generate_article_attribute(sess, encoder, tokens, probs, article, target='ar
     # Return the generated text.
     return gens[-1]
 
-def create_fake(article, sess, encoder, tokens, probs, ):
+def create_fake(article, sess, encoder, tokens, probs, count):
     print(f"Building article from headline '{article['title']}'")
     # generate fake text based on the original paper
     article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
@@ -115,8 +115,7 @@ def create_fake(article, sess, encoder, tokens, probs, ):
     article_text = article['text']
     
     # <img src="http://mnicosia.tech/images/samples_5_100.png"/>
-    image_index = random.randint(0, 499)
-    article_image_url = "http://mnicosia.tech/images/samples_5_" + image_index + ".png"
+    article_image_url = "http://mnicosia.tech/images/samples_5_" + str(count) + ".png"
     article_summary = article['summary']
 
     authors = create_authors()
@@ -196,15 +195,20 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
     saver = tf.train.Saver()
     saver.restore(sess, model_ckpt)
 
-    count = 0
+    fakes_made = 0
+    paper_index = 0
     # process each research paper to make fake papers
     for article in articles:
         #  create first
-        create_fake(article, sess, encoder, tokens, probs)
+        create_fake(article, sess, encoder, tokens, probs, fakes_made)
+        fakes_made += 1
         #  create second
-        # create_fake(article, sess, encoder, tokens, probs)
-        # if count < 104:
+        # create_fake(article, sess, encoder, tokens, probs, fakes_made)
+        fakes_made += 1
+        # if paper_index < 104:
             #  for first 104 articles create third
         #     continue
-        # create_fake(article, sess, encoder, tokens, probs)
+        # create_fake(article, sess, encoder, tokens, probs, fakes_made)
+        fakes_made += 1
+        paper_index += 1
         
