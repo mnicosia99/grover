@@ -1,7 +1,7 @@
 import os
 import json
 import requests
-# import tensorflow as tf
+import tensorflow as tf
 import numpy as np
 import sys
 import feedparser
