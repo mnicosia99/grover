@@ -17,7 +17,7 @@ from lm.modeling import GroverConfig, sample
 from sample.encoder import get_encoder, _tokenize_article_pieces, extract_generated_target
 import random
 
-def generate_html_from_article_text(article_title, article_text, author_list, article_summary, publish_date, university, department, image_url=None):    
+def generate_html_from_article_text(article_title, article_text, author_list, publish_date, university, department, image_url=None, caption = ""):    
     # parse the article text
     p = ttp.Parser()
     result = p.parse(article_text)
@@ -37,11 +37,19 @@ def generate_html_from_article_text(article_title, article_text, author_list, ar
     print(article_text)
     
     # if an image url exists, add it to the returned html
+    # <figure>
+    #    <img src="http://mnicosia.tech/images/samples_5_100.png"/>
+    #    <figcaption>Fig.1 - Trulli, Puglia, Italy.</figcaption>
+    # </figure>
     if image_url is not None:
-        image = "<img src=\"" + image_url + "\"/>"
+        image = "<figure><img src=\"" + image_url + "\"/><figcaption>" + caption + "</figcaption></figure>"
     
     #  create html from article text
-    style = " hr.solid { border-top: 3px solid #bbb;}"
+
+    # body { margin: 20px; text-align: center; } h1 {color: green; } img { float: left; margin: 5px; } p { text-align: justify; font-size: 25px; }
+    # <div class="square"><div> <img src="https://media.geeksforgeeks.org/wp-content/uploads/20190808143838/logsm.png" alt="Longtail boat in Thailand"></div><p></p></div>
+    
+    style = " hr.solid { border-top: 3px solid #bbb;} figure { display: inline-block; border: 0px dotted gray; margin: 20px;text-align: center; } figure img { vertical-align: top; }"
     article_title = "<h1>" + article_title + "</h1>\n"
     authors = "<p>Authors: "
     for author in author_list:
@@ -50,10 +58,11 @@ def generate_html_from_article_text(article_title, article_text, author_list, ar
     publish_date = "Published Date: " + publish_date + "<br/>\n"
     university = "<p>" + university + "</p>\n"
     department = department + "<br/>\n"
-    abstract = "<h3>Abstract</h3>\n<p>" + article_summary + "</p>\n"
+    abstract = ""
+    # abstract = "<h3>Abstract</h3>\n<p>" + article_summary + "</p>\n"
     sep = "<hr class=\"solid\">\n"
     body = article_title + authors + publish_date + sep + university + department + sep + abstract + "<br/><br/>" + article_text
-    article_html = "<html><head>" + image + "<style>" + style + "</style></head><body>" + body + "</body></html>"
+    article_html = "<html><head><style>" + style + "</style></head><body>" + body + image + "</body></html>"
  
     # return the article as html
     return article_html
@@ -109,21 +118,23 @@ def create_fake(article, sess, encoder, tokens, probs, count):
     # Generate a fake title that fits the generated paper text
     article['title'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
     # Generate a fake abstract that fits the generated paper text
-    article['summary'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
+    # article['summary'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
 
     article_title = article['title']
     article_text = article['text']
     
     # <img src="http://mnicosia.tech/images/samples_5_100.png"/>
     article_image_url = "http://mnicosia.tech/images/samples_5_" + str(count) + ".png"
-    article_summary = article['summary']
+    # article_summary = article['summary']
 
     authors = create_authors()
     university = get_random_school()
     department = get_random_department()
     publish_date = get_date(365 * 2, 365 * 8)
+    # caption = TODO
+    caption = "Test Caption"
     article_text = generate_html_from_article_text(
-        article_title, article_text, authors, article_summary, publish_date, university, department, article_image_url)
+        article_title, article_text, authors, publish_date, university, department, article_image_url, caption)
 
     print(f" - Generated fake article titled '{article_title}'")
     article_title = article_title.replace(" ", "-")
