@@ -69,6 +69,7 @@ def download_files_from_gdrive(service, drive, parent, extension, output_dir):
                 if extension in item['name'] and parent in item['parents']:
                     print(item)
                     file_obj = drive.CreateFile({'id': item['id']})
+                    print(output_dir)
                     file_obj.GetContentFile(output_dir + item['name'])
             if nextPageToken == None:
                 done = True
