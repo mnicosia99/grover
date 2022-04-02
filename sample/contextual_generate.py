@@ -99,7 +99,8 @@ print("\n~~\nbatch size={}, max batch size={}, num chunks={}, batch size per chu
 top_p = np.ones((num_chunks, batch_size_per_chunk), dtype=np.float32) * args.top_p
 
 with open(args.metadata_fn, 'r') as f:
-    articles = [json.load(l) for i, l in enumerate(f) if i % args.num_folds == args.fold]
+    articles = [json.load(f)]
+    # articles = [json.loads(l) for i, l in enumerate(f) if i % args.num_folds == args.fold]
 
 tf_config = tf.ConfigProto(allow_soft_placement=True)
 
