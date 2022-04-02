@@ -102,9 +102,9 @@ def generate_article_attribute(sess, encoder, tokens, probs, article, target='ar
     # Return the generated text.
     return gens[-1]
 
-model_type = "mega"
+model_type = "base"
 
-model_dir = os.path.join('/content/gdrive/MyDrive/grover-fork2/grover/models', model_type)
+model_dir = os.path.join('/content/grover/models', model_type)
 if not os.path.exists(model_dir):
     os.makedirs(model_dir)
 
@@ -121,8 +121,8 @@ for ext in ['data-00000-of-00001', 'index', 'meta']:
     
 articles = list()
 
-for filename in os.listdir("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input"):
-    fn = os.path.join("/content/gdrive/MyDrive/grover-fork2/grover/working/outputs/Grover_Input/", filename)
+for filename in os.listdir("/content/grover/working/outputs/Grover_Input"):
+    fn = os.path.join("/content/grover/working/outputs/Grover_Input/", filename)
     # checking if it is a file
     if os.path.isfile(fn):
         try:
@@ -135,8 +135,8 @@ for filename in os.listdir("/content/gdrive/MyDrive/grover-fork2/grover/working/
             f.close()
 
 # Load the pre-trained "huge" Grover model with 1.5 billion params
-model_config_fn = '/content/gdrive/MyDrive/grover-fork2/grover/lm/configs/mega.json'
-model_ckpt = '/content/gdrive/MyDrive/grover-fork2/grover/models/mega/model.ckpt'
+model_config_fn = '/content/grover/lm/configs/base.json'
+model_ckpt = '/content/grover/models/base/model.ckpt'
 encoder = get_encoder()
 news_config = GroverConfig.from_json_file(model_config_fn)
 
@@ -169,7 +169,7 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
     for article in articles:
         print(f"Building article from headline '{article['title']}'")
         # generate fake text based on the original paper
-        article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
+        # article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
         # Generate a fake title that fits the generated paper text
         article['title'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
         # Generate a fake abstract that fits the generated paper text
