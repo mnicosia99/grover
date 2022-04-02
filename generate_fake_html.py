@@ -38,7 +38,7 @@ def generate_html_from_article_text(article_title, article_text, author_list, ar
     
     # if an image url exists, add it to the returned html
     if image_url is not None:
-        image = "<img src=\"https://journals.plos.org/plosone/\"/>"
+        image = "<img src=\"" + image_url + "\"/>"
     
     #  create html from article text
     style = " hr.solid { border-top: 3px solid #bbb;}"
@@ -102,6 +102,37 @@ def generate_article_attribute(sess, encoder, tokens, probs, article, target='ar
     # Return the generated text.
     return gens[-1]
 
+def create_fake(article, sess, encoder, tokens, probs, ):
+    print(f"Building article from headline '{article['title']}'")
+    # generate fake text based on the original paper
+    article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
+    # Generate a fake title that fits the generated paper text
+    article['title'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
+    # Generate a fake abstract that fits the generated paper text
+    article['summary'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
+
+    article_title = article['title']
+    article_text = article['text']
+    
+    # <img src="http://mnicosia.tech/images/samples_5_100.png"/>
+    image_index = random.randint(0, 499)
+    article_image_url = "http://mnicosia.tech/images/samples_5_" + image_index + ".png"
+    article_summary = article['summary']
+
+    authors = create_authors()
+    university = get_random_school()
+    department = get_random_department()
+    publish_date = get_date(365 * 2, 365 * 8)
+    article_text = generate_html_from_article_text(
+        article_title, article_text, authors, article_summary, publish_date, university, department, article_image_url)
+
+    print(f" - Generated fake article titled '{article_title}'")
+    article_title = article_title.replace(" ", "-")
+    filename = "/content/gdrive/My Drive/Articles/generated_fake-" + count + ".html"
+    with open(filename, 'w' ) as f:
+        f.write(article_text)
+    count += 1
+    
 model_type = "mega"
 
 model_dir = os.path.join('/content/gdrive/MyDrive/grover-fork2/grover/models', model_type)
@@ -124,7 +155,7 @@ articles = list()
 for filename in os.listdir("/content/gdrive/MyDrive/grover-fork2/grover/working/inputs/json"):
     fn = os.path.join("/content/gdrive/MyDrive/grover-fork2/grover/working/inputs/json/", filename)
     # checking if it is a file
-    if os.path.isfile(fn):
+    if os.path.isfile(fn) and ".jsonl" not in fn:
         try:
             f = open(fn)
             article = json.load(f)
@@ -165,34 +196,15 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
     saver = tf.train.Saver()
     saver.restore(sess, model_ckpt)
 
+    count = 0
     # process each research paper to make fake papers
     for article in articles:
-        print(f"Building article from headline '{article['title']}'")
-        # generate fake text based on the original paper
-        article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
-        # Generate a fake title that fits the generated paper text
-        article['title'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
-        # Generate a fake abstract that fits the generated paper text
-        article['summary'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
-
-        article_title = article['title']
-        article_text = article['text']
-        article_date = article["iso_date"]
-        article_image_url = article["image_url"]
-        article_tags = article['tags']
-        article_summary = article['summary']
-
-        # Make the article body look more realistic - add spacing, link Twitter handles and hashtags, etc.
-        # You could add more advanced pre-processing here if you wanted.
-        authors = create_authors()
-        university = get_random_school()
-        department = get_random_department()
-        publish_date = get_date(365 * 2, 365 * 8)
-        article_text = generate_html_from_article_text(
-            article_title, article_text, authors, article_summary, publish_date, university, department, article_image_url)
-
-        print(f" - Generated fake article titled '{article_title}'")
-        article_title = article_title.replace(" ", "-")
-        filename = '/content/gdrive/My Drive/Articles/' + f"{article_title}.html"
-        with open(filename, 'w' ) as f:
-          f.write(article_text)
+        #  create first
+        create_fake(article, sess, encoder, tokens, probs)
+        #  create second
+        # create_fake(article, sess, encoder, tokens, probs)
+        # if count < 104:
+            #  for first 104 articles create third
+        #     continue
+        # create_fake(article, sess, encoder, tokens, probs)
+        
