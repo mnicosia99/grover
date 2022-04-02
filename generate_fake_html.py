@@ -169,7 +169,7 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
     for article in articles:
         print(f"Building article from headline '{article['title']}'")
         # generate fake text based on the original paper
-        # article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
+        article['text'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="article")
         # Generate a fake title that fits the generated paper text
         article['title'] = generate_article_attribute(sess, encoder, tokens, probs, article, target="title")
         # Generate a fake abstract that fits the generated paper text
