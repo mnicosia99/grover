@@ -210,16 +210,17 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
     paper_index = 0
     # process each research paper to make fake papers
     for article in articles:
+        paper_index += 1
         #  create first
         create_fake(article, sess, encoder, tokens, probs, fakes_made)
         fakes_made += 1
         #  create second
-        # create_fake(article, sess, encoder, tokens, probs, fakes_made)
+        create_fake(article, sess, encoder, tokens, probs, fakes_made)
         fakes_made += 1
-        # if paper_index < 104:
+        if paper_index < 104:
             #  for first 104 articles create third
-        #     continue
-        # create_fake(article, sess, encoder, tokens, probs, fakes_made)
+            continue
+        # create third
+        create_fake(article, sess, encoder, tokens, probs, fakes_made)
         fakes_made += 1
-        paper_index += 1
         
