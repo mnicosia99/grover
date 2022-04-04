@@ -34,7 +34,7 @@ FLAGS = flags.FLAGS
 
 ## Required parameters
 flags.DEFINE_string(
-    "config_file", '../lm/configs/base.json',
+    "config_file", '/content/gdrive/MyDrive/grover-fork2/grover/lm/configs/base.json',
     "The config json file corresponding to the pre-trained news model. "
     "This specifies the model architecture.")
 
@@ -183,6 +183,7 @@ def main(_):
     with tf.gfile.Open(FLAGS.input_data, "r") as f:
         for l in f:
             item = json.loads(l)
+            print(item)
 
             # This little hack is because we don't want to tokenize the article twice
             context_ids = _flatten_and_tokenize_metadata(encoder=encoder, item=item)
