@@ -114,6 +114,9 @@ flags.DEFINE_integer(
     "num_tpu_cores", 8,
     "Only used if `use_tpu` is True. Total number of TPU cores to use.")
 
+def rreplace(s, old, new, occurrence):
+    li = s.rsplit(old, occurrence)
+    return new.join(li)
 
 def _flatten_and_tokenize_metadata(encoder, item):
     """
@@ -126,6 +129,12 @@ def _flatten_and_tokenize_metadata(encoder, item):
     metadata = []
     for key in ['domain', 'date', 'authors', 'title', 'article']:
         val = item.get(key, None)
+        if key == "authors":
+            val = ""
+            for v in item.get(key, None):
+                val += v + ","
+            val = rreplace(val, ",", "", 1)
+            print(val)
         if val is not None:
             metadata.append(encoder.__dict__[f'begin_{key}'])
             metadata.extend(encoder.encode(val))
