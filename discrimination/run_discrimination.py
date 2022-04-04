@@ -64,7 +64,7 @@ flags.DEFINE_integer(
 flags.DEFINE_integer("iterations_per_loop", 1000,
                      "How many steps to make in each estimator call.")
 
-flags.DEFINE_integer("batch_size", 2, "Batch size used")
+flags.DEFINE_integer("batch_size", 32, "Batch size used")
 
 flags.DEFINE_integer("max_training_examples", -1, "if you wanna limit the number")
 
@@ -134,7 +134,6 @@ def _flatten_and_tokenize_metadata(encoder, item):
             for v in item.get(key, None):
                 val += v + ","
             val = rreplace(val, ",", "", 1)
-            print(val)
         if val is not None:
             metadata.append(encoder.__dict__[f'begin_{key}'])
             metadata.extend(encoder.encode(val))
@@ -150,7 +149,6 @@ def main(_):
 
     # These lines of code are just to check if we've already saved something into the directory
     if tf.gfile.Exists(FLAGS.output_dir):
-        print("exists")
         print(f"The output directory {FLAGS.output_dir} exists!")
         if FLAGS.do_train:
             print("EXITING BECAUSE DO_TRAIN is true", flush=True)
@@ -192,7 +190,6 @@ def main(_):
     with tf.gfile.Open(FLAGS.input_data, "r") as f:
         for l in f:
             item = json.loads(l)
-            print(item)
 
             # This little hack is because we don't want to tokenize the article twice
             context_ids = _flatten_and_tokenize_metadata(encoder=encoder, item=item)
@@ -247,9 +244,6 @@ def main(_):
 
     # Training
     if FLAGS.do_train:
-        print(len(examples['train']))
-        print(FLAGS.batch_size)
-        print(FLAGS.num_train_epochs)
         num_train_steps = int((len(examples['train']) / FLAGS.batch_size) * FLAGS.num_train_epochs)
         num_warmup_steps = int(num_train_steps * FLAGS.warmup_proportion)
         assert num_train_steps > 0
