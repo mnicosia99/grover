@@ -34,7 +34,7 @@ FLAGS = flags.FLAGS
 
 ## Required parameters
 flags.DEFINE_string(
-    "config_file", 'configs/base.json',
+    "config_file", '../lm/configs/base.json',
     "The config json file corresponding to the pre-trained news model. "
     "This specifies the model architecture.")
 
