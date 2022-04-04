@@ -238,6 +238,9 @@ def main(_):
 
     # Training
     if FLAGS.do_train:
+        print(len(examples['train']))
+        print(FLAGS.batch_size)
+        print(FLAGS.num_train_epochs)
         num_train_steps = int((len(examples['train']) / FLAGS.batch_size) * FLAGS.num_train_epochs)
         num_warmup_steps = int(num_train_steps * FLAGS.warmup_proportion)
         assert num_train_steps > 0
