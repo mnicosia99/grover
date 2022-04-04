@@ -64,7 +64,7 @@ flags.DEFINE_integer(
 flags.DEFINE_integer("iterations_per_loop", 1000,
                      "How many steps to make in each estimator call.")
 
-flags.DEFINE_integer("batch_size", 32, "Batch size used")
+flags.DEFINE_integer("batch_size", 2, "Batch size used")
 
 flags.DEFINE_integer("max_training_examples", -1, "if you wanna limit the number")
 
