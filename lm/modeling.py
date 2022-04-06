@@ -22,7 +22,7 @@ import tensorflow as tf
 
 # import optimization_adafactor
 from lm import optimization_adafactor
-from utils import get_assignment_map_from_checkpoint, get_shape_list, get_attention_mask, gelu, layer_norm, dropout, \
+from lm.utils import get_assignment_map_from_checkpoint, get_shape_list, get_attention_mask, gelu, layer_norm, dropout, \
     construct_scalar_host_call
 
 
