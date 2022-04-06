@@ -42,7 +42,7 @@ def input_fn_builder(input_files,
         """The actual input function."""
         batch_size = params["batch_size"]
         name_to_features = {
-            "input_ids": tf.FixedLenFeature([seq_length + 1], tf.int64),
+            "input_ids": tf.io.FixedLenFeature([seq_length + 1], tf.int64),
         }
 
         # For training, we want a lot of parallel reading and shuffling.
@@ -134,9 +134,9 @@ def classification_input_fn_builder(input_file, seq_length, is_training,
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
     name_to_features = {
-        "input_ids": tf.FixedLenFeature([seq_length], tf.int64),
-        "label_ids": tf.FixedLenFeature([], tf.int64),
-        "is_real_example": tf.FixedLenFeature([], tf.int64),
+        "input_ids": tf.io.FixedLenFeature([seq_length], tf.int64),
+        "label_ids": tf.io.FixedLenFeature([], tf.int64),
+        "is_real_example": tf.io.FixedLenFeature([], tf.int64),
     }
 
     def input_fn(params):
