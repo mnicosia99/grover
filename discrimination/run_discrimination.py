@@ -259,8 +259,8 @@ def main(_):
         # tpu_cluster_resolver = tf.cluster_resolver.TPUClusterResolver(
             FLAGS.tpu_name, zone=FLAGS.tpu_zone, project=FLAGS.gcp_project)
 
-    is_per_host = tf.compat.v1.tpu.InputPipelineConfig.PER_HOST_V2
-    run_config = tf.contrib.tpu.RunConfig(
+    is_per_host = tf.compat.v1.estimator.tpu.InputPipelineConfig.PER_HOST_V2
+    run_config = tf.compat.v1.estimator.tpu.RunConfig(
     # is_per_host = tf.tpu.InputPipelineConfig.PER_HOST_V2
     # run_config = tf.tpu.RunConfig(
         cluster=tpu_cluster_resolver,
@@ -268,7 +268,7 @@ def main(_):
         model_dir=FLAGS.output_dir,
         save_checkpoints_steps=FLAGS.iterations_per_loop,
         keep_checkpoint_max=None,
-        tpu_config=tf.contrib.tpu.TPUConfig(
+        tpu_config=tf.compat.v1.estimator.tpu.TPUConfig(
         # tpu_config=tf.tpu.TPUConfig(
             iterations_per_loop=FLAGS.iterations_per_loop,
             num_shards=FLAGS.num_tpu_cores,
@@ -288,7 +288,7 @@ def main(_):
 
     # If TPU is not available, this will fall back to normal Estimator on CPU
     # or GPU.
-    estimator = tf.contrib.tpu.TPUEstimator(
+    estimator = tf.compat.v1.estimator.tpu.TPUEstimator(
     # estimator = tf.tpu.TPUEstimator(
         use_tpu=FLAGS.use_tpu,
         model_fn=model_fn,
