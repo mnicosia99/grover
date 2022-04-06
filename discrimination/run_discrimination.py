@@ -29,7 +29,7 @@ from lm.modeling import classification_model_fn_builder, GroverConfig
 from lm.utils import _save_np
 from sample.encoder import get_encoder
 
-flags = tf.flags
+flags = tf.compat.v1.flags
 
 FLAGS = flags.FLAGS
 
