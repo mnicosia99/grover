@@ -149,7 +149,7 @@ def main(_):
     # tf.compat.v1.logging.set_verbosity(tf.logging.INFO)
 
     # These lines of code are just to check if we've already saved something into the directory
-    if tf.gfile.Exists(FLAGS.output_dir):
+    if tf.compat.v1.gfile.Exists(FLAGS.output_dir):
         print(f"The output directory {FLAGS.output_dir} exists!")
         if FLAGS.do_train:
             print("EXITING BECAUSE DO_TRAIN is true", flush=True)
