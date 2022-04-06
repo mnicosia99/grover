@@ -122,8 +122,8 @@ def layer_norm(input_tensor, name=None, epsilon=1e-5):
         # print(input_tensor)
         # print(input_tensor.shape[-1])
         dim = input_tensor.shape[-1]
-        gamma = tf.get_variable('gamma', [dim], initializer=tf.constant_initializer(1))
-        beta = tf.get_variable('beta', [dim], initializer=tf.constant_initializer(0))
+        gamma = tf.compat.v1.get_variable('gamma', [dim], initializer=tf.constant_initializer(1))
+        beta = tf.compat.v1.get_variable('beta', [dim], initializer=tf.constant_initializer(0))
         mean = tf.reduce_mean(input_tensor, axis=-1, keepdims=True)
         std = tf.reduce_mean(tf.square(input_tensor - mean), axis=-1, keepdims=True)
         input_tensor = (input_tensor - mean) * tf.rsqrt(std + epsilon)
