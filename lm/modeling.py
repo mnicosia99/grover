@@ -18,7 +18,7 @@ import json
 import math
 
 import six
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 # import optimization_adafactor
 from lm import optimization_adafactor
