@@ -155,16 +155,16 @@ def main(_):
             print("EXITING BECAUSE DO_TRAIN is true", flush=True)
             return
         for split in ['val', 'test']:
-            if tf.gfile.Exists(os.path.join(FLAGS.output_dir, f'{split}-probs.npy')) and getattr(FLAGS,
+            if tf.compat.v1.gfile.Exists(os.path.join(FLAGS.output_dir, f'{split}-probs.npy')) and getattr(FLAGS,
                                                                                                  f'predict_{split}'):
                 print(f"EXITING BECAUSE {split}-probs.npy exists", flush=True)
                 return
         # Double check to see if it has trained!
-        if not tf.gfile.Exists(os.path.join(FLAGS.output_dir, 'checkpoint')):
+        if not tf.compat.v1.gfile.Exists(os.path.join(FLAGS.output_dir, 'checkpoint')):
             print("EXITING BECAUSE NO CHECKPOINT.", flush=True)
             return
         stuff = {}
-        with tf.gfile.Open(os.path.join(FLAGS.output_dir, 'checkpoint'), 'r') as f:
+        with tf.compat.v1.gfile.Open(os.path.join(FLAGS.output_dir, 'checkpoint'), 'r') as f:
             # model_checkpoint_path: "model.ckpt-0"
             # all_model_checkpoint_paths: "model.ckpt-0"
             for l in f:
