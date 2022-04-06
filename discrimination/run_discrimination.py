@@ -146,7 +146,7 @@ def main(_):
     LABEL_LIST = ['machine', 'human']
     LABEL_INV_MAP = {label: i for i, label in enumerate(LABEL_LIST)}
 
-    tf.logging.set_verbosity(tf.logging.INFO)
+    tf.compat.v1.logging.set_verbosity(tf.logging.INFO)
 
     # These lines of code are just to check if we've already saved something into the directory
     if tf.gfile.Exists(FLAGS.output_dir):
