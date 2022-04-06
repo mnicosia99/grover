@@ -932,13 +932,13 @@ def classification_model_fn_builder(config: GroverConfig, init_checkpoint, learn
 
             eval_metrics = (metric_fn,
                             [per_example_loss, label_ids, logits, is_real_example])
-            output_spec = tf.compat.v1.tpu.TPUEstimatorSpec(
+            output_spec = tf.compat.v1.estimator.tpu.TPUEstimatorSpec(
                 mode=mode,
                 loss=total_loss,
                 eval_metrics=eval_metrics,
                 scaffold_fn=scaffold_fn)
         else:
-            output_spec = tf.compat.v1.tpu.TPUEstimatorSpec(
+            output_spec = tf.compat.v1.estimator.tpu.TPUEstimatorSpec(
                 mode=mode,
                 predictions={'logits': logits,
                              'probs': tf.nn.softmax(logits, axis=-1)},
