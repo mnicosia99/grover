@@ -23,10 +23,10 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.python.lib.io import file_io
 
-from dataloader import classification_convert_examples_to_features, classification_input_fn_builder
-from modeling import classification_model_fn_builder, GroverConfig
-from utils import _save_np
-from encoder import get_encoder
+from lm.dataloader import classification_convert_examples_to_features, classification_input_fn_builder
+from lm.modeling import classification_model_fn_builder, GroverConfig
+from lm.utils import _save_np
+from sample.encoder import get_encoder
 
 flags = tf.flags
 
