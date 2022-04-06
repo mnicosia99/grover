@@ -91,7 +91,7 @@ def classification_convert_examples_to_features(
         chop_from_front_if_needed=True):
     """Convert a set of `InputExample`s to a TFRecord file."""
 
-    writer = tf.python_io.TFRecordWriter(output_file)
+    writer = tf.io.TFRecordWriter(output_file)
 
     label_map = {label: i for i, label in enumerate(labels)}
 
