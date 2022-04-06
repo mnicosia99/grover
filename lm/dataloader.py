@@ -96,8 +96,8 @@ def classification_convert_examples_to_features(
     label_map = {label: i for i, label in enumerate(labels)}
 
     for (ex_index, example) in enumerate(examples):
-        if ex_index % 10000 == 0:
-            tf.logging.info("Writing example %d of %d" % (ex_index, len(examples)))
+        # if ex_index % 10000 == 0:
+        #     tf.logging.info("Writing example %d of %d" % (ex_index, len(examples)))
 
         # begin_summary is our [CLS] token
         tokens = example['ids'] + [encoder.begin_summary]
