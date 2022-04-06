@@ -117,6 +117,10 @@ def layer_norm(input_tensor, name=None, epsilon=1e-5):
     """Run layer normalization on the last dimension of the tensor."""
     name2use = f'LayerNorm_{name}' if name is not None else name
     with tf.compat.v1.variable_scope(name2use, default_name='LayerNorm'):
+        print(type(input_tensor))
+        print(type(input_tensor.shape[-1]))
+        print(input_tensor)
+        print(input_tensor.shape[-1])
         dim = input_tensor.shape[-1].value
         gamma = tf.get_variable('gamma', [dim], initializer=tf.constant_initializer(1))
         beta = tf.get_variable('beta', [dim], initializer=tf.constant_initializer(0))
