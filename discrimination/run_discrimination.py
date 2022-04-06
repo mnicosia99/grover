@@ -20,7 +20,8 @@ import json
 import os
 
 import numpy as np
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
+# import tensorflow.compat.v1 as tf
 from tensorflow.python.lib.io import file_io
 
 from lm.dataloader import classification_convert_examples_to_features, classification_input_fn_builder
